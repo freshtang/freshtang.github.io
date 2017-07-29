@@ -287,8 +287,7 @@
 
     <!-- Custom Head -->
     
-<link rel="stylesheet" href="/hexo/css/prism-xonokai.css" type="text/css">
-<link rel="stylesheet" href="/hexo/css/prism-line-numbers.css" type="text/css"></head>
+</head>
 
 
     
@@ -483,28 +482,28 @@
 ├─src    
 │  │index.js                源代码入口
 </code></pre><p>编写如下最基本的配置：（入口entry, 出口output, 编译不同文件需要用到的模块module, 需要使用的插件plugins）</p>
-<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> HtmlWebpackPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'html-webpack-plugin'</span><span class="token punctuation">)</span>
+<pre><code class="js">const path = require(&#39;path&#39;)
+const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;)
 
-<span class="token keyword">let</span> config <span class="token operator">=</span> <span class="token punctuation">{</span>
-    entry<span class="token punctuation">:</span> path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">'../src/index.js'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    output<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-        path<span class="token punctuation">:</span> path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">'../dist'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-        filename<span class="token punctuation">:</span> <span class="token string">'bundle.js'</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    module<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-        rules<span class="token punctuation">:</span> <span class="token punctuation">[</span>
-            <span class="token punctuation">{</span>
-                test<span class="token punctuation">:</span> <span class="token regex">/\.js$/</span><span class="token punctuation">,</span>
-                use<span class="token punctuation">:</span> <span class="token string">'babel-loader'</span>
-            <span class="token punctuation">}</span>
-        <span class="token punctuation">]</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    plugins<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token keyword">new</span> <span class="token class-name">HtmlWebpackPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
-<span class="token punctuation">}</span>
+let config = {
+    entry: path.resolve(__dirname, &#39;../src/index.js&#39;),
+    output: {
+        path: path.resolve(__dirname, &#39;../dist&#39;),
+        filename: &#39;bundle.js&#39;
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                use: &#39;babel-loader&#39;
+            }
+        ]
+    },
+    plugins: [new HtmlWebpackPlugin()]
+}
 
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> config
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+module.exports = config
+</code></pre>
 <p>在终端打包出现的报告，成功打包。</p>
 <pre><code>jeansdeMacBook-Pro:webpack_demo jean$ npm run build
 
@@ -543,162 +542,162 @@ module.exports = {
     ...
   };
 </code></pre><p>在print.js 写一个错误语句</p>
-<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-     cosnole<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'I get called from print.js!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre><code class="js">export default function() {
+     cosnole.log(&#39;I get called from print.js!&#39;);
+}
+</code></pre>
 <p>运行的时候source map能够精确的指出错误在哪里</p>
 <pre><code>print.js:2 Uncaught ReferenceError: cosnole is not defined
     at HTMLButtonElement.__webpack_exports__.a (print.js:2)
 __webpack_exports__.a    @    print.js:2
 </code></pre><h3 id="2-使用-webpack-dev-server"><a href="#2-使用-webpack-dev-server" class="headerlink" title="2.使用 webpack-dev-server"></a>2.使用 webpack-dev-server</h3><p>webpack-dev-server 为你提供了一个简单的 web 服务器，并且能够实时重新加载(live reloading)。</p>
-<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// webpack.dev.config.js</span>
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
-    <span class="token operator">...</span>
-<span class="token operator">+</span>   devServer<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-      contentBase<span class="token punctuation">:</span> path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">'../dist'</span><span class="token punctuation">)</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token operator">...</span>
-  <span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre><code class="js">// webpack.dev.config.js
+module.exports = {
+    ...
++   devServer: {
+      contentBase: path.resolve(__dirname, &#39;../dist&#39;)
+    },
+    ...
+  };
+</code></pre>
 <p>package.json 增加</p>
 <pre><code>...
 &quot;dev&quot;: &quot;webpack-dev-server --open --config build/webpack.dev.config.js&quot;
 ...
 </code></pre><p>以上配置告知 webpack-dev-server，在 localhost:8080 下建立服务，将 dist 目录下的文件，作为可访问文件。<br>使用 npm run dev 浏览器就打开预览的网页</p>
-<h3 id="3-使用-Hot-Module-Replacement"><a href="#3-使用-Hot-Module-Replacement" class="headerlink" title="3.使用 Hot Module Replacement"></a>3.使用 Hot Module Replacement</h3><pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// webpack.dev.config.js</span>
-<span class="token operator">...</span>
-  plugins<span class="token punctuation">:</span> <span class="token punctuation">[</span>
-    <span class="token keyword">new</span> <span class="token class-name">webpack<span class="token punctuation">.</span>HotModuleReplacementPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 启用 HMR</span>
-  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<h3 id="3-使用-Hot-Module-Replacement"><a href="#3-使用-Hot-Module-Replacement" class="headerlink" title="3.使用 Hot Module Replacement"></a>3.使用 Hot Module Replacement</h3><pre><code class="js">// webpack.dev.config.js
+...
+  plugins: [
+    new webpack.HotModuleReplacementPlugin() // 启用 HMR
+  ],
 
-<span class="token operator">...</span>
-  devServer<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-    hot<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 告诉 dev-server 我们在使用 HMR</span>
-    contentBase<span class="token punctuation">:</span> path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">'dist'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    publicPath<span class="token punctuation">:</span> <span class="token string">'/'</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+...
+  devServer: {
+    hot: true, // 告诉 dev-server 我们在使用 HMR
+    contentBase: path.resolve(__dirname, &#39;dist&#39;),
+    publicPath: &#39;/&#39;
+  }
+};
+</code></pre>
 <h4 id="其实webpack-dev-server是一个小型express服务器，搭配Hot-Module-Replacement使用，但是个人喜欢webpack-dev-middleware-和-webpack-hot-middleware搭配使用。"><a href="#其实webpack-dev-server是一个小型express服务器，搭配Hot-Module-Replacement使用，但是个人喜欢webpack-dev-middleware-和-webpack-hot-middleware搭配使用。" class="headerlink" title=" 其实webpack-dev-server是一个小型express服务器，搭配Hot Module Replacement使用，但是个人喜欢webpack-dev-middleware 和 webpack-hot-middleware搭配使用。"></a><a name="fenced-code-block"> 其实webpack-dev-server是一个小型express服务器，搭配Hot Module Replacement使用，但是个人喜欢webpack-dev-middleware 和 webpack-hot-middleware搭配使用。</a></h4><h3 id="4-使用-webpack-dev-middleware"><a href="#4-使用-webpack-dev-middleware" class="headerlink" title="4.使用 webpack-dev-middleware"></a>4.使用 webpack-dev-middleware</h3><p>其实就是在express中用一个中间件，把webpack编译生成的文件部署到服务器上。</p>
-<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// dev-server.js</span>
-<span class="token keyword">const</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> webpack <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'webpack'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> webpackConfig <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./webpack.dev.config.js'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> webpackDevMiddleware <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"webpack-dev-middleware"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre><code class="js">// dev-server.js
+const express = require(&#39;express&#39;)
+const webpack = require(&#39;webpack&#39;)
+const webpackConfig = require(&#39;./webpack.dev.config.js&#39;)
+const webpackDevMiddleware = require(&quot;webpack-dev-middleware&quot;);
 
-<span class="token keyword">let</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+let app = express()
 
-<span class="token keyword">let</span> compiler <span class="token operator">=</span> <span class="token function">webpack</span><span class="token punctuation">(</span>webpackConfig<span class="token punctuation">)</span><span class="token punctuation">;</span>
+let compiler = webpack(webpackConfig);
 
-app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">webpackDevMiddleware</span><span class="token punctuation">(</span>compiler<span class="token punctuation">,</span> <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// options</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app.use(webpackDevMiddleware(compiler, {
+    // options
+}));
 
-<span class="token keyword">const</span> port <span class="token operator">=</span> <span class="token number">3000</span>
-app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span>port <span class="token operator">||</span> <span class="token number">9999</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`server start at </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>port<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+const port = 3000
+app.listen(port || 9999, function(e){
+    console.log(`server start at ${port}`)
+})
+</code></pre>
 <h3 id="5-使用-webpack-hot-middleware"><a href="#5-使用-webpack-hot-middleware" class="headerlink" title="5.使用 webpack-hot-middleware"></a>5.使用 webpack-hot-middleware</h3><p>配合webpack-dev-middleware使用的搭建express服务器的文件中添加下面，</p>
-<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// dev-server.js</span>
-<span class="token operator">...</span>
-<span class="token keyword">const</span> hotMiddleware <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'webpack-hot-middleware'</span><span class="token punctuation">)</span>
-<span class="token operator">...</span>
-app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>hotMiddleware <span class="token punctuation">(</span>compiler<span class="token punctuation">,</span> <span class="token punctuation">{</span>
-  log<span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token operator">...</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre><code class="js">// dev-server.js
+...
+const hotMiddleware = require(&#39;webpack-hot-middleware&#39;)
+...
+app.use(hotMiddleware (compiler, {
+  log: () =&gt; {}
+}))
+...
+</code></pre>
 <p>在开发环境的webpack配置也要作如下修改</p>
-<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// webpack.dev.config.js</span>
-<span class="token operator">...</span>
-<span class="token keyword">const</span> hotMiddlewareScript <span class="token operator">=</span> <span class="token string">'webpack-hot-middleware/client?reload=true'</span>
+<pre><code class="js">// webpack.dev.config.js
+...
+const hotMiddlewareScript = &#39;webpack-hot-middleware/client?reload=true&#39;
 
-<span class="token comment" spellcheck="true">// add hot-reload related code to entry chunks</span>
-Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span>baseConfig<span class="token punctuation">.</span>entry<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  baseConfig<span class="token punctuation">.</span>entry<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span>hotMiddlewareScript<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>baseConfig<span class="token punctuation">.</span>entry<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
+// add hot-reload related code to entry chunks
+Object.keys(baseConfig.entry).forEach(function (name) {
+  baseConfig.entry[name] = [hotMiddlewareScript].concat(baseConfig.entry[name])
+})
 
-<span class="token keyword">let</span> config <span class="token operator">=</span> <span class="token punctuation">{</span>
-    devtool<span class="token punctuation">:</span> <span class="token string">'#eval-source-map'</span><span class="token punctuation">,</span>
-    plugins<span class="token punctuation">:</span> <span class="token punctuation">[</span>
-        <span class="token keyword">new</span> <span class="token class-name">webpack<span class="token punctuation">.</span>optimize<span class="token punctuation">.</span>OccurrenceOrderPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-        <span class="token keyword">new</span> <span class="token class-name">webpack<span class="token punctuation">.</span>HotModuleReplacementPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-        <span class="token keyword">new</span> <span class="token class-name">webpack<span class="token punctuation">.</span>NoErrorsPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token punctuation">]</span>
-<span class="token punctuation">}</span>
-<span class="token operator">...</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+let config = {
+    devtool: &#39;#eval-source-map&#39;,
+    plugins: [
+        new webpack.optimize.OccurrenceOrderPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin()
+    ]
+}
+...
+</code></pre>
 <p>需要修改的有两处。一是plugins的位置，增加3个插件，二是entry的位置，每一个entry后都增加一个hotMiddlewareScript。</p>
 <h2 id="三、生产环境"><a href="#三、生产环境" class="headerlink" title="三、生产环境"></a>三、生产环境</h2><p>如下配置在基础配置的基础上，增加三个插件，都是用来压缩打包的。</p>
-<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// webpack.prod.config.js</span>
-<span class="token keyword">const</span> baseConfig <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./webpack.base.config.js'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> merge <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'webpack-merge'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> webpack <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'webpack'</span><span class="token punctuation">)</span>
+<pre><code class="js">// webpack.prod.config.js
+const baseConfig = require(&#39;./webpack.base.config.js&#39;)
+const merge = require(&#39;webpack-merge&#39;)
+const path = require(&#39;path&#39;)
+const webpack = require(&#39;webpack&#39;)
 
-<span class="token keyword">let</span> config <span class="token operator">=</span> <span class="token punctuation">{</span>
-    devtool<span class="token punctuation">:</span> <span class="token string">'#eval-source-map'</span><span class="token punctuation">,</span>
-    plugins<span class="token punctuation">:</span><span class="token punctuation">[</span>
-        <span class="token keyword">new</span> <span class="token class-name">webpack<span class="token punctuation">.</span>LoaderOptionsPlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-          minimize<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-          debug<span class="token punctuation">:</span> <span class="token boolean">false</span>
-        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-        <span class="token keyword">new</span> <span class="token class-name">webpack<span class="token punctuation">.</span>DefinePlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-          <span class="token string">'process.env.NODE_ENV'</span><span class="token punctuation">:</span> JSON<span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span><span class="token string">'production'</span><span class="token punctuation">)</span>
-        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-        <span class="token keyword">new</span> <span class="token class-name">webpack<span class="token punctuation">.</span>optimize<span class="token punctuation">.</span>UglifyJsPlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-          beautify<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-          mangle<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-            screw_ie8<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-            keep_fnames<span class="token punctuation">:</span> <span class="token boolean">true</span>
-          <span class="token punctuation">}</span><span class="token punctuation">,</span>
-          compress<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-            screw_ie8<span class="token punctuation">:</span> <span class="token boolean">true</span>
-          <span class="token punctuation">}</span><span class="token punctuation">,</span>
-          comments<span class="token punctuation">:</span> <span class="token boolean">false</span>
-        <span class="token punctuation">}</span><span class="token punctuation">)</span>
-   <span class="token punctuation">]</span>
-<span class="token punctuation">}</span>
+let config = {
+    devtool: &#39;#eval-source-map&#39;,
+    plugins:[
+        new webpack.LoaderOptionsPlugin({
+          minimize: true,
+          debug: false
+        }),
+        new webpack.DefinePlugin({
+          &#39;process.env.NODE_ENV&#39;: JSON.stringify(&#39;production&#39;)
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+          beautify: false,
+          mangle: {
+            screw_ie8: true,
+            keep_fnames: true
+          },
+          compress: {
+            screw_ie8: true
+          },
+          comments: false
+        })
+   ]
+}
 
-<span class="token function">webpack</span><span class="token punctuation">(</span><span class="token function">merge</span><span class="token punctuation">(</span>baseConfig<span class="token punctuation">,</span> config<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword">throw</span> err
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+webpack(merge(baseConfig, config), function (err) {
+  if (err) throw err
+})
+</code></pre>
 <h2 id="四、代码分离"><a href="#四、代码分离" class="headerlink" title="四、代码分离"></a>四、代码分离</h2><p>代码分离是 webpack 中最引人注目的特性之一。此特性能够把代码分离到不同的 bundle 中，然后可以按需加载或并行加载这些文件。代码分离可以用于获取更小的 bundle，以及控制资源加载优先级，如果使用合理，会极大影响加载时间。</p>
 <ul>
 <li>入口起点：使用 entry 选项手动分离代码。</li>
 <li>防止重复：使用 CommonsChunkPlugin 去重和分离 chunk。</li>
 <li>动态导入：通过模块的内联函数调用来分离代码。</li>
 </ul>
-<h3 id="1-Entry-Points"><a href="#1-Entry-Points" class="headerlink" title="1.Entry Points"></a>1.Entry Points</h3><pre class="line-numbers language-js"><code class="language-js"><span class="token operator">...</span>
-entry<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-    index<span class="token punctuation">:</span> <span class="token string">'./src/index.js'</span><span class="token punctuation">,</span>
-    another<span class="token punctuation">:</span> <span class="token string">'./src/another-module.js'</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-<span class="token operator">...</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="1-Entry-Points"><a href="#1-Entry-Points" class="headerlink" title="1.Entry Points"></a>1.Entry Points</h3><pre><code class="js">...
+entry: {
+    index: &#39;./src/index.js&#39;,
+    another: &#39;./src/another-module.js&#39;
+  },
+...
+</code></pre>
 <h3 id="2-Prevent-Duplication"><a href="#2-Prevent-Duplication" class="headerlink" title="2.Prevent Duplication"></a>2.Prevent Duplication</h3><p>The CommonsChunkPlugin allows us to extract common dependencies into an existing entry chunk or an entirely new chunk.</p>
-<pre class="line-numbers language-js"><code class="language-js"><span class="token operator">...</span>
-plugins<span class="token punctuation">:</span> <span class="token punctuation">[</span>
-      <span class="token operator">...</span>
-<span class="token operator">+</span>     <span class="token keyword">new</span> <span class="token class-name">webpack<span class="token punctuation">.</span>optimize<span class="token punctuation">.</span>CommonsChunkPlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-<span class="token operator">+</span>       name<span class="token punctuation">:</span> <span class="token string">'common'</span> <span class="token comment" spellcheck="true">// Specify the common bundle's name.</span>
-<span class="token operator">+</span>     <span class="token punctuation">}</span><span class="token punctuation">)</span>
-      <span class="token operator">...</span>
-<span class="token punctuation">]</span><span class="token punctuation">,</span>
-<span class="token operator">...</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre><code class="js">...
+plugins: [
+      ...
++     new webpack.optimize.CommonsChunkPlugin({
++       name: &#39;common&#39; // Specify the common bundle&#39;s name.
++     })
+      ...
+],
+...
+</code></pre>
 <h3 id="3-Dynamic-Imports"><a href="#3-Dynamic-Imports" class="headerlink" title="3.Dynamic Imports"></a>3.Dynamic Imports</h3><p>import() calls use promises.异步加载的第三方模块可以使用chunkFilename</p>
-<pre class="line-numbers language-js"><code class="language-js"><span class="token operator">...</span>
-output<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-      filename<span class="token punctuation">:</span> <span class="token string">'[name].bundle.js'</span><span class="token punctuation">,</span>
-<span class="token operator">+</span>     chunkFilename<span class="token punctuation">:</span> <span class="token string">'[name].bundle.js'</span><span class="token punctuation">,</span>
-      path<span class="token punctuation">:</span> path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">'dist'</span><span class="token punctuation">)</span>
-    <span class="token punctuation">}</span>
-<span class="token operator">...</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre><code class="js">...
+output: {
+      filename: &#39;[name].bundle.js&#39;,
++     chunkFilename: &#39;[name].bundle.js&#39;,
+      path: path.resolve(__dirname, &#39;dist&#39;)
+    }
+...
+</code></pre>
 
     
 
