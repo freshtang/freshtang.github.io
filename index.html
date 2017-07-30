@@ -205,7 +205,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -215,7 +215,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -287,9 +287,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-30T07:57:53+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-30T14:51:34+08:00">
                 2017-07-30
               </time>
             
@@ -378,22 +378,16 @@ Child html-webpack-plugin for &quot;index.html&quot;:
        [2] (webpack)/buildin/global.js 487 bytes {0} [built]
        [3] (webpack)/buildin/module.js 500 bytes {0} [built]
         + 2 hidden modules
-</code></pre><pre><code>
-
-## 二、开发环境
-
-（！以下部分内容仅用于开发环境，请不要在生产环境中使用它们！）
-
-### 1.使用 source map
-为了更容易地追踪错误和警告，JavaScript 提供了 source map 功能，将编译后的代码映射回原始源代码。如果一个错误来自于 b.js，source map 就会明确的告诉你。
-
-```js
-module.exports = {
-    ...
-+   devtool: &#39;inline-source-map&#39;,
-    ...
-  };
-</code></pre><p>在print.js 写一个错误语句</p>
+</code></pre><p>以上是终端显示的内容</p>
+<h2 id="二、开发环境"><a href="#二、开发环境" class="headerlink" title="二、开发环境"></a>二、开发环境</h2><p>（！以下部分内容仅用于开发环境，请不要在生产环境中使用它们！）</p>
+<h3 id="1-使用-source-map"><a href="#1-使用-source-map" class="headerlink" title="1.使用 source map"></a>1.使用 source map</h3><p>为了更容易地追踪错误和警告，JavaScript 提供了 source map 功能，将编译后的代码映射回原始源代码。如果一个错误来自于 b.js，source map 就会明确的告诉你。</p>
+<pre class="line-numbers language-js"><code class="language-js">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token operator">...</span>
+<span class="token operator">+</span>   devtool<span class="token punctuation">:</span> <span class="token string">'inline-source-map'</span><span class="token punctuation">,</span>
+    <span class="token operator">...</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在print.js 写一个错误语句</p>
 <pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
      cosnole<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'I get called from print.js!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
@@ -622,7 +616,7 @@ output<span class="token punctuation">:</span> <span class="token punctuation">{
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-24T16:06:53+08:00">
                 2017-07-24
@@ -1110,7 +1104,7 @@ Dep<span class="token punctuation">.</span>prototype <span class="token operator
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-20T14:06:53+08:00">
                 2017-07-20
@@ -1516,7 +1510,7 @@ console<span class="token punctuation">.</span><span class="token function">log<
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-19T09:32:47+08:00">
                 2017-07-19
@@ -1649,7 +1643,7 @@ console<span class="token punctuation">.</span><span class="token function">log<
             <div class="site-state-item site-state-posts">
               <a href="/hexo/archives/">
                 <span class="site-state-item-count">4</span>
-                <span class="site-state-item-name">Artikel</span>
+                <span class="site-state-item-name">posts</span>
               </a>
             </div>
           
@@ -1703,7 +1697,7 @@ console<span class="token punctuation">.</span><span class="token function">log<
 
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

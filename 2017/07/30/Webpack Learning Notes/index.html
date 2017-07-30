@@ -101,7 +101,7 @@
 <meta property="og:description" content="Webpack Learning Notes 一、起步├─build │  │ webpack.config.js ├─dist                      打包结果出口 ├─node_modules ├─src     │  │index.js                源代码入口 编写如下最基本的配置：（入口entry, 出口output, 编译不同文件需要用到的模块modu">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://doc.webpack-china.org/bf093af83ee5548ff10fef24927b7cd2.svg">
-<meta property="og:updated_time" content="2017-07-29T23:57:53.000Z">
+<meta property="og:updated_time" content="2017-07-30T06:51:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Webpack学习笔记">
 <meta name="twitter:description" content="Webpack Learning Notes 一、起步├─build │  │ webpack.config.js ├─dist                      打包结果出口 ├─node_modules ├─src     │  │index.js                源代码入口 编写如下最基本的配置：（入口entry, 出口output, 编译不同文件需要用到的模块modu">
@@ -206,7 +206,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -216,7 +216,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -286,9 +286,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-30T07:57:53+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-30T14:51:34+08:00">
                 2017-07-30
               </time>
             
@@ -375,22 +375,16 @@ Child html-webpack-plugin for &quot;index.html&quot;:
        [2] (webpack)/buildin/global.js 487 bytes {0} [built]
        [3] (webpack)/buildin/module.js 500 bytes {0} [built]
         + 2 hidden modules
-</code></pre><pre><code>
-
-## 二、开发环境
-
-（！以下部分内容仅用于开发环境，请不要在生产环境中使用它们！）
-
-### 1.使用 source map
-为了更容易地追踪错误和警告，JavaScript 提供了 source map 功能，将编译后的代码映射回原始源代码。如果一个错误来自于 b.js，source map 就会明确的告诉你。
-
-```js
-module.exports = {
-    ...
-+   devtool: &#39;inline-source-map&#39;,
-    ...
-  };
-</code></pre><p>在print.js 写一个错误语句</p>
+</code></pre><p>以上是终端显示的内容</p>
+<h2 id="二、开发环境"><a href="#二、开发环境" class="headerlink" title="二、开发环境"></a>二、开发环境</h2><p>（！以下部分内容仅用于开发环境，请不要在生产环境中使用它们！）</p>
+<h3 id="1-使用-source-map"><a href="#1-使用-source-map" class="headerlink" title="1.使用 source map"></a>1.使用 source map</h3><p>为了更容易地追踪错误和警告，JavaScript 提供了 source map 功能，将编译后的代码映射回原始源代码。如果一个错误来自于 b.js，source map 就会明确的告诉你。</p>
+<pre class="line-numbers language-js"><code class="language-js">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token operator">...</span>
+<span class="token operator">+</span>   devtool<span class="token punctuation">:</span> <span class="token string">'inline-source-map'</span><span class="token punctuation">,</span>
+    <span class="token operator">...</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在print.js 写一个错误语句</p>
 <pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
      cosnole<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'I get called from print.js!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
@@ -641,10 +635,10 @@ output<span class="token punctuation">:</span> <span class="token punctuation">{
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -665,7 +659,7 @@ output<span class="token punctuation">:</span> <span class="token punctuation">{
             <div class="site-state-item site-state-posts">
               <a href="/hexo/archives/">
                 <span class="site-state-item-count">4</span>
-                <span class="site-state-item-name">Artikel</span>
+                <span class="site-state-item-name">posts</span>
               </a>
             </div>
           
@@ -703,7 +697,7 @@ output<span class="token punctuation">:</span> <span class="token punctuation">{
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Webpack-Learning-Notes"><span class="nav-number">1.</span> <span class="nav-text">Webpack Learning Notes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、起步"><span class="nav-number">1.1.</span> <span class="nav-text">一、起步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-使用-webpack-dev-server"><span class="nav-number">1.1.1.</span> <span class="nav-text">2.使用 webpack-dev-server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-使用-Hot-Module-Replacement"><span class="nav-number">1.1.2.</span> <span class="nav-text">3.使用 Hot Module Replacement</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#其实webpack-dev-server是一个小型express服务器，搭配Hot-Module-Replacement使用，但是个人喜欢webpack-dev-middleware-和-webpack-hot-middleware搭配使用。"><span class="nav-number">1.1.2.1.</span> <span class="nav-text"> 其实webpack-dev-server是一个小型express服务器，搭配Hot Module Replacement使用，但是个人喜欢webpack-dev-middleware 和 webpack-hot-middleware搭配使用。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-使用-webpack-dev-middleware"><span class="nav-number">1.1.3.</span> <span class="nav-text">4.使用 webpack-dev-middleware</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-使用-webpack-hot-middleware"><span class="nav-number">1.1.4.</span> <span class="nav-text">5.使用 webpack-hot-middleware</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、生产环境"><span class="nav-number">1.2.</span> <span class="nav-text">三、生产环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、代码分离"><span class="nav-number">1.3.</span> <span class="nav-text">四、代码分离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Entry-Points"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.Entry Points</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Prevent-Duplication"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.Prevent Duplication</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Dynamic-Imports"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.Dynamic Imports</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Webpack-Learning-Notes"><span class="nav-number">1.</span> <span class="nav-text">Webpack Learning Notes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、起步"><span class="nav-number">1.1.</span> <span class="nav-text">一、起步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、开发环境"><span class="nav-number">1.2.</span> <span class="nav-text">二、开发环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-使用-source-map"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.使用 source map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-使用-webpack-dev-server"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.使用 webpack-dev-server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-使用-Hot-Module-Replacement"><span class="nav-number">1.2.3.</span> <span class="nav-text">3.使用 Hot Module Replacement</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#其实webpack-dev-server是一个小型express服务器，搭配Hot-Module-Replacement使用，但是个人喜欢webpack-dev-middleware-和-webpack-hot-middleware搭配使用。"><span class="nav-number">1.2.3.1.</span> <span class="nav-text"> 其实webpack-dev-server是一个小型express服务器，搭配Hot Module Replacement使用，但是个人喜欢webpack-dev-middleware 和 webpack-hot-middleware搭配使用。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-使用-webpack-dev-middleware"><span class="nav-number">1.2.4.</span> <span class="nav-text">4.使用 webpack-dev-middleware</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-使用-webpack-hot-middleware"><span class="nav-number">1.2.5.</span> <span class="nav-text">5.使用 webpack-hot-middleware</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、生产环境"><span class="nav-number">1.3.</span> <span class="nav-text">三、生产环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、代码分离"><span class="nav-number">1.4.</span> <span class="nav-text">四、代码分离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Entry-Points"><span class="nav-number">1.4.1.</span> <span class="nav-text">1.Entry Points</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Prevent-Duplication"><span class="nav-number">1.4.2.</span> <span class="nav-text">2.Prevent Duplication</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Dynamic-Imports"><span class="nav-number">1.4.3.</span> <span class="nav-text">3.Dynamic Imports</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -735,7 +729,7 @@ output<span class="token punctuation">:</span> <span class="token punctuation">{
 
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
