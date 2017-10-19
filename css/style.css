@@ -57,12 +57,12 @@ h6 {
 }
 
 a {
-    color: #4969a2;
+    color: #2d556d;
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #91c9ef;
+    color: #13252f;
 }
 
 a:link {
@@ -150,6 +150,7 @@ nav button {
         margin: 0;
     }
     .nar-wrap {
+        float: left;
         height: 0;
         overflow: hidden;
         -webkit-transition: height .35s ease;
@@ -193,19 +194,31 @@ nav button {
     box-shadow: 0 1px 0 rgba(230, 230, 230, .9);
 }
 /*index*/
-
 #index {
     width: 70%;
     max-width: 710px;
     margin: 4rem auto;
 }
 
+#tags,
+#categories,
+#archive,
+#post {
+    width: 70%;
+    margin: 4rem auto;
+}
+
 @media (max-width: 979px) {
+    #tags,
+    #categories,
+    #post,
+    #archive,
     #index {
         width: 90%;
     }
 }
 
+#post,
 #index article {
     padding-bottom: 2rem;
     padding-top: 2.5rem;
@@ -213,15 +226,44 @@ nav button {
     position: relative;
 }
 
+#post {
+    margin: 20px auto;
+}
+
 #index article header h3 {
     margin: 20px -5px;
 }
 
-#index article section p {
+#index article header h3 span{
+    vertical-align: super;
+    font-size: .5em;
+    margin: 0 5px;
+}
+
+#index article section .read-more span {
+    opacity: 0;
+    transition: opacity .5s;
+}
+
+#index article section .read-more:hover span {
+    opacity: 1;
+}
+
+#index article section .read-more {
+    padding: 5px 15px;
+    margin-top: 15px;
+}
+
+#index article section .read-more:hover {
+    border: 1px solid #13252f;
+    border-radius: 4px;
+}
+
+#index .article section {
     margin: 0;
     font-size: 0.9em;
-    line-height: 1.7em;
-    color: #3A4145;
+    line-height: 1.3em;
+    color: #000000
 }
 
 #index article footer {
@@ -312,4 +354,65 @@ nav button {
 .archive .post-archive li {
     padding: 10px;
     color: #504d4d;
+}
+
+/* categories && tags && archive*/
+
+#archive header h2,
+#tags header h2,
+#categories header h2 {
+    margin-bottom: 0;
+    margin-top: 0;
+    text-align: center;
+    color: white;
+}
+
+#tags header,
+#archive header,
+#categories header{
+    background-color: #504d4d;
+    box-shadow: 0 0 5px #504d4d;
+    padding: 20px 0;
+    border-radius: 10px 10px 0 0;
+}
+
+#archive #content .widget ul li ,
+#tags #content .widget ul li ,
+#categories #content .widget ul li {
+    display: inline-block;
+    padding: 8px 20px;
+    border: 1px solid #d5dbde;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+#tags #content .widget ul,
+#archive #content .widget ul,
+#categories #content .widget ul{
+    border-bottom: 1px solid #d5dbde;
+    padding: 20px;
+    list-style-type: none;
+}
+
+#tags #content .widget ul span,
+#categories #content .widget ul span{
+    vertical-align: super;
+    font-size: .8em;
+}
+
+#tags #content,
+#archive #content,
+#categories #content {
+    color: #504d4d;
+    padding: 40px 70px;
+    box-shadow: 0 0 5px #504d4d;
+    border-radius: 0 0 10px 10px;
+}
+
+@media (max-width: 979px) {
+    #tags #content,
+    #archive #content,
+    #categories #content {
+        padding: 10px;
+    }
 }

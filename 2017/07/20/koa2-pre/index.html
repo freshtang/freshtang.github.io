@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-    <title>Hexo_blog</title>
+    <title>Little life, little blog</title>
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" media="screen" type="text/css">
     <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/prism-atom-dark.css" type="text/css">
@@ -17,9 +17,16 @@
                         <span class="icon-toggle icon"></span>
                         <span class="icon-toggle icon"></span>
                     </button>
-                    <a  class="brand" href="/">Hexo_blog</a>
+                    <a  class="brand" href="/">Little life, little blog</a>
                     <div class="clear nar-wrap">
                         <ul class="nav clear">
+                            
+                                <li>
+                                    <a href="/" title="Home">
+                                        <i class="fa fa-home"></i>
+                                        Home
+                                    </a>
+                                </li>
                             
                                 <li>
                                     <a href="/archives" title="Archives">
@@ -48,7 +55,322 @@
         
             </header>
 <div class="main">
-    
+    <main id="post">
+  
+    <article class="article">
+            <header>
+                <h3>
+                    <a href="/2017/07/20/koa2-pre/">koa2总结
+                    </a>
+                </h3>
+            </header>
+            <section>
+                <p>
+                    <p>koa 是由 Express 原班人马打造的，致力于成为一个更小、更富有表现力、更健壮的 Web 框架。使用 koa 编写 web 应用，通过组合不同的 generator，可以免除重复繁琐的回调函数嵌套，并极大地提升错误处理的效率。koa 不在内核方法中绑定任何中间件，它仅仅提供了一个轻量优雅的函数库，使得编写 Web 应用变得得心应手。</p>
+<a id="more"></a> 
+<h1 id="一、koa2结构"><a href="#一、koa2结构" class="headerlink" title="一、koa2结构"></a>一、koa2结构</h1><pre><code>├── lib
+│   ├── application.js
+│   ├── context.js
+│   ├── request.js
+│   └── response.js
+└── package.json
+</code></pre><ul>
+<li>application.js 是整个koa2 的入口文件，封装了context，request，response，以及最核心的中间件处理流程。</li>
+<li>context.js 处理应用上下文，里面直接封装部分request.js和response.js的方法</li>
+<li>request.js 处理http请求</li>
+<li>response.js 处理http响应</li>
+</ul>
+<p>只提供封装好http上下文、请求、响应，以及基于async/await的中间件容器。（如果要使用koa@1基于generator中间件，需要通过中间件koa-convert封装一下才能使用。）</p>
+<h1 id="二、中间件开发和使用"><a href="#二、中间件开发和使用" class="headerlink" title="二、中间件开发和使用"></a>二、中间件开发和使用</h1><h2 id="1-generator中间件"><a href="#1-generator中间件" class="headerlink" title="1.generator中间件"></a>1.generator中间件</h2><p>generator中间件返回的应该是function * () 函数</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">/* loggerGenerator */</span>
+<span class="token keyword">function</span> <span class="token function">log</span><span class="token punctuation">(</span> ctx <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span> ctx<span class="token punctuation">.</span>method<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>header<span class="token punctuation">.</span>host <span class="token operator">+</span> ctx<span class="token punctuation">.</span>url <span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token operator">*</span> <span class="token punctuation">(</span> next <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token comment" spellcheck="true">// 执行中间件的操作</span>
+        <span class="token function">log</span><span class="token punctuation">(</span> <span class="token keyword">this</span> <span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span> next <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">yield</span> next
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>在koa1中使用</li>
+</ul>
+<pre class="line-numbers language-js"><code class="language-js">app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">loggerGenerator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li>在koa2中使用</li>
+</ul>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">const</span> convert <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa-convert'</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">convert</span><span class="token punctuation">(</span><span class="token function">loggerGenerator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h2 id="2-async中间件开发"><a href="#2-async中间件开发" class="headerlink" title="2.async中间件开发"></a>2.async中间件开发</h2><p>async 中间件只能在 koa v2中使用。返回async函数</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">/* logger-async */</span>
+<span class="token keyword">function</span> <span class="token function">log</span><span class="token punctuation">(</span> ctx <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span> ctx<span class="token punctuation">.</span>method<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>header<span class="token punctuation">.</span>host <span class="token operator">+</span> ctx<span class="token punctuation">.</span>url <span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token punctuation">(</span> ctx<span class="token punctuation">,</span> next <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">log</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">await</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-js"><code class="language-js">app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">loggerAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="二、路由"><a href="#二、路由" class="headerlink" title="二、路由"></a>二、路由</h1><h2 id="1-koa2-原生路由实现"><a href="#1-koa2-原生路由实现" class="headerlink" title="1.koa2 原生路由实现"></a>1.koa2 原生路由实现</h2><pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">const</span> Koa <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Koa</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span> <span class="token keyword">async</span> <span class="token punctuation">(</span> ctx <span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> url <span class="token operator">=</span> ctx<span class="token punctuation">.</span>request<span class="token punctuation">.</span>url
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> url
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="2-koa-router中间件"><a href="#2-koa-router中间件" class="headerlink" title="2.koa-router中间件"></a>2.koa-router中间件</h2><pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// koa-router是一个比较好用的路由中间件</span>
+<span class="token keyword">const</span> Koa <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Koa</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> Router <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa-router'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 子路由</span>
+<span class="token keyword">let</span> page <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+page<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/404'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span> ctx <span class="token punctuation">)</span><span class="token operator">=</span><span class="token operator">></span><span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'404 page!'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/helloworld'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span> ctx <span class="token punctuation">)</span><span class="token operator">=</span><span class="token operator">></span><span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'helloworld page!'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 装载所有子路由</span>
+<span class="token keyword">let</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+router<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'/page'</span><span class="token punctuation">,</span> page<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> page<span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 加载路由中间件</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'[demo] route-use-middleware is starting at port 3000'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="三、POST请求参数获取"><a href="#三、POST请求参数获取" class="headerlink" title="三、POST请求参数获取"></a>三、POST请求参数获取</h1><h2 id="1-koa2-原生获取数据"><a href="#1-koa2-原生获取数据" class="headerlink" title="1.koa2 原生获取数据"></a>1.koa2 原生获取数据</h2><pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">const</span> Koa <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Koa</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span> <span class="token keyword">async</span> <span class="token punctuation">(</span> ctx <span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> ctx<span class="token punctuation">.</span>url <span class="token operator">===</span> <span class="token string">'/'</span> <span class="token operator">&amp;&amp;</span> ctx<span class="token punctuation">.</span>method <span class="token operator">===</span> <span class="token string">'GET'</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 当GET请求时候返回表单页面</span>
+    <span class="token keyword">let</span> html <span class="token operator">=</span> <span class="token template-string"><span class="token string">`
+      &lt;h1>koa2 request post demo&lt;/h1>
+      &lt;form method="POST" action="/">
+        &lt;p>userName&lt;/p>
+        &lt;input name="userName" />&lt;br/>
+        &lt;p>nickName&lt;/p>
+        &lt;input name="nickName" />&lt;br/>
+        &lt;p>email&lt;/p>
+        &lt;input name="email" />&lt;br/>
+        &lt;button type="submit">submit&lt;/button>
+      &lt;/form>
+    `</span></span>
+    ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> html
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span> ctx<span class="token punctuation">.</span>url <span class="token operator">===</span> <span class="token string">'/'</span> <span class="token operator">&amp;&amp;</span> ctx<span class="token punctuation">.</span>method <span class="token operator">===</span> <span class="token string">'POST'</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 当POST请求的时候，解析POST表单里的数据，并显示出来</span>
+    <span class="token keyword">let</span> postData <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">parsePostData</span><span class="token punctuation">(</span> ctx <span class="token punctuation">)</span>
+    ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> postData
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 其他请求显示404</span>
+    ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'&lt;h1>404！！！ o(╯□╰)o&lt;/h1>'</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 解析上下文里node原生请求的POST参数</span>
+<span class="token keyword">function</span> <span class="token function">parsePostData</span><span class="token punctuation">(</span> ctx <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token keyword">let</span> postdata <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+      ctx<span class="token punctuation">.</span>req<span class="token punctuation">.</span><span class="token function">addListener</span><span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+        postdata <span class="token operator">+</span><span class="token operator">=</span> data
+      <span class="token punctuation">}</span><span class="token punctuation">)</span>
+      ctx<span class="token punctuation">.</span>req<span class="token punctuation">.</span><span class="token function">addListener</span><span class="token punctuation">(</span><span class="token string">"end"</span><span class="token punctuation">,</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">let</span> parseData <span class="token operator">=</span> <span class="token function">parseQueryStr</span><span class="token punctuation">(</span> postdata <span class="token punctuation">)</span>
+        <span class="token function">resolve</span><span class="token punctuation">(</span> parseData <span class="token punctuation">)</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span> err <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">reject</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 将POST请求参数字符串解析成JSON</span>
+<span class="token keyword">function</span> <span class="token function">parseQueryStr</span><span class="token punctuation">(</span> queryStr <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> queryData <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+  <span class="token keyword">let</span> queryStrList <span class="token operator">=</span> queryStr<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">'&amp;'</span><span class="token punctuation">)</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span> queryStrList <span class="token punctuation">)</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span>  <span class="token keyword">let</span> <span class="token punctuation">[</span> index<span class="token punctuation">,</span> queryStr <span class="token punctuation">]</span> <span class="token keyword">of</span> queryStrList<span class="token punctuation">.</span><span class="token function">entries</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> itemList <span class="token operator">=</span> queryStr<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">'='</span><span class="token punctuation">)</span>
+    queryData<span class="token punctuation">[</span> itemList<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">decodeURIComponent</span><span class="token punctuation">(</span>itemList<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> queryData
+<span class="token punctuation">}</span>
+
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'[demo] request post is starting at port 3000'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="2-koa-bodyparser中间件"><a href="#2-koa-bodyparser中间件" class="headerlink" title="2.koa-bodyparser中间件"></a>2.koa-bodyparser中间件</h2><pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">const</span> Koa <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Koa</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> bodyParser <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa-bodyparser'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 使用ctx.body解析中间件</span>
+<span class="token keyword">const</span> Koa <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Koa</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> bodyParser <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa-bodyparser'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 使用ctx.body解析中间件</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">bodyParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span> <span class="token keyword">async</span> <span class="token punctuation">(</span> ctx <span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> ctx<span class="token punctuation">.</span>url <span class="token operator">===</span> <span class="token string">'/'</span> <span class="token operator">&amp;&amp;</span> ctx<span class="token punctuation">.</span>method <span class="token operator">===</span> <span class="token string">'GET'</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 当GET请求时候返回表单页面</span>
+    <span class="token keyword">let</span> html <span class="token operator">=</span> <span class="token template-string"><span class="token string">`
+      &lt;h1>koa2 request post demo&lt;/h1>
+      &lt;form method="POST" action="/">
+        &lt;p>userName&lt;/p>
+        &lt;input name="userName" />&lt;br/>
+        &lt;p>nickName&lt;/p>
+        &lt;input name="nickName" />&lt;br/>
+        &lt;p>email&lt;/p>
+        &lt;input name="email" />&lt;br/>
+        &lt;button type="submit">submit&lt;/button>
+      &lt;/form>
+    `</span></span>
+    ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> html
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span> ctx<span class="token punctuation">.</span>url <span class="token operator">===</span> <span class="token string">'/'</span> <span class="token operator">&amp;&amp;</span> ctx<span class="token punctuation">.</span>method <span class="token operator">===</span> <span class="token string">'POST'</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 当POST请求的时候，中间件koa-bodyparser解析POST表单里的数据，并显示出来</span>
+    <span class="token keyword">let</span> postData <span class="token operator">=</span> ctx<span class="token punctuation">.</span>request<span class="token punctuation">.</span>body
+    ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> postData
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 其他请求显示404</span>
+    ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'&lt;h1>404！！！ o(╯□╰)o&lt;/h1>'</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'[demo] request post is starting at port 3000'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="四、静态资源加载"><a href="#四、静态资源加载" class="headerlink" title="四、静态资源加载"></a>四、静态资源加载</h1><h2 id="1-原生实现的部分代码"><a href="#1-原生实现的部分代码" class="headerlink" title="1.原生实现的部分代码"></a>1.原生实现的部分代码</h2><pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">const</span> Koa <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> content <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./util/content'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> mimes <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./util/mimes'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Koa</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 静态资源目录对于相对入口文件index.js的路径</span>
+<span class="token keyword">const</span> staticPath <span class="token operator">=</span> <span class="token string">'./static'</span>
+
+<span class="token comment" spellcheck="true">// 解析资源类型</span>
+<span class="token keyword">function</span> <span class="token function">parseMime</span><span class="token punctuation">(</span> url <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> extName <span class="token operator">=</span> path<span class="token punctuation">.</span><span class="token function">extname</span><span class="token punctuation">(</span> url <span class="token punctuation">)</span>
+  extName <span class="token operator">=</span> extName <span class="token operator">?</span>  extName<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">:</span> <span class="token string">'unknown'</span>
+  <span class="token keyword">return</span>  mimes<span class="token punctuation">[</span> extName <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span> <span class="token keyword">async</span> <span class="token punctuation">(</span> ctx <span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 静态资源目录在本地的绝对路径</span>
+  <span class="token keyword">let</span> fullStaticPath <span class="token operator">=</span> path<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> staticPath<span class="token punctuation">)</span>
+
+  <span class="token comment" spellcheck="true">// 获取静态资源内容，有可能是文件内容，目录，或404</span>
+  <span class="token keyword">let</span> _content <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">content</span><span class="token punctuation">(</span> ctx<span class="token punctuation">,</span> fullStaticPath <span class="token punctuation">)</span>
+
+  <span class="token comment" spellcheck="true">// 解析请求内容的类型</span>
+  <span class="token keyword">let</span> _mime <span class="token operator">=</span> <span class="token function">parseMime</span><span class="token punctuation">(</span> ctx<span class="token punctuation">.</span>url <span class="token punctuation">)</span>
+
+  <span class="token comment" spellcheck="true">// 如果有对应的文件类型，就配置上下文的类型</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> _mime <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    ctx<span class="token punctuation">.</span>type <span class="token operator">=</span> _mime
+  <span class="token punctuation">}</span>
+
+  <span class="token comment" spellcheck="true">// 输出静态资源内容</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> _mime <span class="token operator">&amp;&amp;</span> _mime<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span><span class="token string">'image/'</span><span class="token punctuation">)</span> <span class="token operator">>=</span> <span class="token number">0</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 如果是图片，则用node原生res，输出二进制数据</span>
+    ctx<span class="token punctuation">.</span>res<span class="token punctuation">.</span><span class="token function">writeHead</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span>
+    ctx<span class="token punctuation">.</span>res<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>_content<span class="token punctuation">,</span> <span class="token string">'binary'</span><span class="token punctuation">)</span>
+    ctx<span class="token punctuation">.</span>res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 其他则输出文本</span>
+    ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> _content
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'[demo] static-server is starting at port 3000'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="2-koa-static中间件使用"><a href="#2-koa-static中间件使用" class="headerlink" title="2.koa-static中间件使用"></a>2.koa-static中间件使用</h2><pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">const</span> Koa <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> <span class="token keyword">static</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa-static'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Koa</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 静态资源目录对于相对入口文件index.js的路径</span>
+<span class="token keyword">const</span> staticPath <span class="token operator">=</span> <span class="token string">'./static'</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token keyword">static</span><span class="token punctuation">(</span>
+  path<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span> __dirname<span class="token punctuation">,</span>  staticPath<span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span> <span class="token keyword">async</span> <span class="token punctuation">(</span> ctx <span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'hello world'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'[demo] static-use-middleware is starting at port 3000'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="五、cookie／session"><a href="#五、cookie／session" class="headerlink" title="五、cookie／session"></a>五、cookie／session</h1><h2 id="1-koa2使用cookie"><a href="#1-koa2使用cookie" class="headerlink" title="1.koa2使用cookie"></a>1.koa2使用cookie</h2><ul>
+<li>ctx.cookies.get(name, [options]) 读取上下文请求中的cookie</li>
+<li>ctx.cookies.set(name, value, [options]) 在上下文中写入cookie</li>
+</ul>
+<pre class="line-numbers language-js"><code class="language-js">ctx<span class="token punctuation">.</span>cookies<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span>
+      <span class="token string">'cid'</span><span class="token punctuation">,</span> 
+      <span class="token string">'hello world'</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span>
+        domain<span class="token punctuation">:</span> <span class="token string">'localhost'</span><span class="token punctuation">,</span>  <span class="token comment" spellcheck="true">// 写cookie所在的域名</span>
+        path<span class="token punctuation">:</span> <span class="token string">'/index'</span><span class="token punctuation">,</span>       <span class="token comment" spellcheck="true">// 写cookie所在的路径</span>
+        maxAge<span class="token punctuation">:</span> <span class="token number">10</span> <span class="token operator">*</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// cookie有效时长</span>
+        expires<span class="token punctuation">:</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token string">'2017-02-15'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment" spellcheck="true">// cookie失效时间</span>
+        httpOnly<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment" spellcheck="true">// 是否只用于http请求中获取</span>
+        overwrite<span class="token punctuation">:</span> <span class="token boolean">false</span>  <span class="token comment" spellcheck="true">// 是否允许重写</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="1-koa2使用session"><a href="#1-koa2使用session" class="headerlink" title="1.koa2使用session"></a>1.koa2使用session</h2><ul>
+<li>如果session数据量很小，可以直接存在内存中</li>
+<li>如果session数据量很大，则需要存储介质存放session数据</li>
+</ul>
+<p>数据库存储方案</p>
+<ul>
+<li>将session存放在MySQL数据库中</li>
+<li>需要用到中间件<br>koa-session-minimal 适用于koa2 的session中间件，提供存储介质的读写接口 。<br>koa-mysql-session 为koa-session-minimal中间件提供MySQL数据库的session数据读写操作。</li>
+<li>将sessionId和对于的数据存到数据库</li>
+<li>将数据库的存储的sessionId存到页面的cookie中</li>
+<li>根据cookie的sessionId去获取对于的session信息</li>
+</ul>
+
+                  <a href="/2017/07/20/koa2-pre/"><i class="fa fa-angle-double-right"></i></a>
+                </p>
+            </section>
+            
+        </article>
+
+</main>
 </div>
 <footer id="footer">
 
