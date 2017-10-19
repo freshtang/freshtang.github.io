@@ -265,6 +265,10 @@ nav button {
     line-height: 1.7em;
 }
 
+#index .article section pre{
+    font-size: 0.4rem;
+}
+
 #index article footer {
     display: block;
     margin: 1.75rem 0 0 0;
