@@ -11,7 +11,7 @@ tog.addEventListener('click', function (e) {
         a.classList.add('dropdown');
         wrap.style.height = li.length * 40 + 'px';
     }
-})
+});
 
 // 侧边栏按钮
 var togside = document.querySelector('#tog-side');
@@ -32,4 +32,28 @@ togside.addEventListener('click', function (e) {
         icon.classList.remove('fa-user');
         icon.classList.add('fa-reply');
     }
-})
+});
+
+var topBtn = document.querySelector('#to-top');
+topBtn.addEventListener('click', function (e) {
+    smoothscroll();
+});
+
+ //滚动条滚动时触发
+var clientHeight = document.documentElement.clientHeight;
+window.onscroll = function() {
+   var osTop = document.documentElement.scrollTop || document.body.scrollTop;
+   if (osTop >= 0.6*clientHeight) {
+    topBtn.style.display = "block";
+   } else {
+    topBtn.style.display = "none";
+   };
+};
+
+function smoothscroll(){
+    var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+    if (currentScroll > 0) {
+         window.requestAnimationFrame(smoothscroll);
+         window.scrollTo (0,currentScroll - (currentScroll/10));
+    }
+}

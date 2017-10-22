@@ -400,6 +400,7 @@ nav button {
 #categories #content .widget ul li {
     display: inline-block;
     padding: 8px 20px;
+    margin: 10px 0;
     border: 1px solid #d5dbde;
     border-radius: 4px;
     margin-right: 10px;
@@ -472,11 +473,24 @@ body {
     }
 }
 
-#tog-side{
+.btn-gp{
+    text-align: center;
     position: fixed;
     right: 1.5rem;
-    bottom: 3rem;
+    bottom: 3.2rem;
     z-index: 20;
+    width: 20px;
+}
+
+#to-top{
+    animation: fadeInFormBottom .5s;
+    display: none;
+    bottom: 2rem;
+}
+
+@keyframes fadeInFormBottom {
+    from {bottom: -2rem;}
+    to {bottom: 2rem;}
 }
 
 .sidebar{
