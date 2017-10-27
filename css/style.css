@@ -16,6 +16,17 @@ html {
     /*10 ÷ 16 × 100% = 62.5%*/
 }
 
+table{
+    border-spacing: 0;
+    border: 1px solid grey;
+}
+
+table td,
+table th{
+    border: 1px solid grey;
+    padding: 2px 10px;
+}
+
 h1 {
     font-size: 2rem !important;
 }
