@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link href="/images/blog.png" rel="shortcut icon">
+    <title>blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/prism-atom-dark.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+        
+<div class="main">
+    <header id="header">
+  <nav class="clear">
+      
+      <button class="toggle">
+          <span class="icon-toggle icon"></span>
+          <span class="icon-toggle icon"></span>
+          <span class="icon-toggle icon"></span>
+      </button>
+      <a  class="brand" href="/">Little life, little blog</a>
+      <div class="clear nar-wrap">
+          <ul class="nav clear">
+              
+                  <li>
+                      <a href="/" title="Home">
+                          <i class="fa fa-home"></i>
+                          Home
+                      </a>
+                  </li>
+              
+                  <li>
+                      <a href="/archives" title="Archives">
+                          <i class="fa fa-archive"></i>
+                          Archives
+                      </a>
+                  </li>
+              
+                  <li>
+                      <a href="/categories" title="Categories">
+                          <i class="fa fa-folder"></i>
+                          Categories
+                      </a>
+                  </li>
+              
+                  <li>
+                      <a href="/tags" title="Tags">
+                          <i class="fa fa-tags"></i>
+                          Tags
+                      </a>
+                  </li>
+              
+          </ul>
+      </div>
+  </nav>
+
+</header>
+    <main id="post">
+  
+    <article class="article">
+            <header>
+                <h3>
+                    PWA：Service Worker 应用详解
+                    
+                        <a href="/tags/PWA/"><span ><i class="fa fa-tags"></i>PWA</a>
+                    
+                </h3>
+            </header>
+            <div class="decorate"><time datetime="2017-09-30">2018-04-26</time> On 
+                <a href="/categories/前端/">前端、</a>
+             </div>
+            <section>
+                <p>
+                    <p>PWA （ Progressive Web Apps，渐进式网页应用）是由谷歌提出的新一代 Web 应用概念，旨在提供可靠、快速、类似 Native 应用的服务方案。Service Worker 最主要的特点是：在页面中注册并安装成功后，运行于浏览器后台，不受页面刷新的影响，可以监听和截拦作用域范围内所有页面的 HTTP 请求。Service Worker 可以在基于浏览器的 web 应用中实现如离线缓存、消息推送、静默更新等 native 应用常见的功能，以给 web 应用提供更好更丰富的使用体验。</p>
+<a id="more"></a> 
+<h1 id="入门：-手写简单的PWA"><a href="#入门：-手写简单的PWA" class="headerlink" title="入门： 手写简单的PWA"></a>入门： 手写简单的PWA</h1><h2 id="注册-service-worker"><a href="#注册-service-worker" class="headerlink" title="注册 service worker"></a>注册 service worker</h2><p>首先第一步需要在html上注册service worker，代码如下，实际是只需要一句就能注册</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token operator">&lt;</span>script<span class="token operator">></span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">'serviceWorker'</span> <span class="token keyword">in</span> navigator<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  navigator<span class="token punctuation">.</span>serviceWorker
+    <span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token string">'/sw.js'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> scope<span class="token punctuation">:</span> <span class="token string">'/'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>reg <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'ServiceWorker 注册成功！作用域为: '</span><span class="token punctuation">,</span> reg<span class="token punctuation">.</span>scope<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token keyword">catch</span><span class="token punctuation">(</span>err <span class="token operator">=</span><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'ServiceWorker 注册失败: '</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="安装-service-worker"><a href="#安装-service-worker" class="headerlink" title="安装 service worker"></a>安装 service worker</h2><p>service worker下载后会安装，触发安装 “install” 事件，在安装之前把静态资源缓存起来。</p>
+<pre class="line-numbers language-js"><code class="language-js">
+<span class="token keyword">const</span> CACHE_NAME <span class="token operator">=</span> <span class="token string">"cache_v1.0.1"</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> urlsToCache <span class="token operator">=</span> <span class="token punctuation">[</span>
+  <span class="token string">'/'</span><span class="token punctuation">,</span>
+  <span class="token string">"index.html"</span><span class="token punctuation">,</span>
+  <span class="token string">"offline.jpg"</span><span class="token punctuation">,</span>
+  <span class="token string">'sw.js'</span>
+<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+self<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'install'</span><span class="token punctuation">,</span> event <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  event<span class="token punctuation">.</span><span class="token function">waitUntil</span><span class="token punctuation">(</span>
+    caches<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span>CACHE_NAME<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>cache <span class="token operator">=</span><span class="token operator">></span> cache<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>urlsToCache<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> self<span class="token punctuation">.</span><span class="token function">skipWaiting</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="劫持fetch引用缓存返回"><a href="#劫持fetch引用缓存返回" class="headerlink" title="劫持fetch引用缓存返回"></a>劫持fetch引用缓存返回</h2><p>网页获取资源的过程中, 在 Service Worker 可以捕获到 fetch 事件, 当请求的资源匹配service worker缓存的时候，返回service worker的缓存资源:</p>
+<pre class="line-numbers language-js"><code class="language-js">self<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'fetch'</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  e<span class="token punctuation">.</span><span class="token function">respondWith</span><span class="token punctuation">(</span>
+    caches<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>request<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>response <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> response
+      <span class="token punctuation">}</span>
+      <span class="token keyword">return</span> <span class="token function">fetch</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>request<span class="token punctuation">.</span>url<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="更新信息，清理旧版资源"><a href="#更新信息，清理旧版资源" class="headerlink" title="更新信息，清理旧版资源"></a>更新信息，清理旧版资源</h2><p>已经处于激活状态的旧的 Service Worker 还在运行，新的 Service Worker 完成安装后会进入 waiting 状态。直到所有已打开的页面都关闭，旧的 Service Worker 自动停止，新的 Service Worker 才会在接下来打开的页面里生效。可以通过文件名字把资源更新。</p>
+<pre class="line-numbers language-js"><code class="language-js">self<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'activate'</span><span class="token punctuation">,</span> evnet <span class="token operator">=</span><span class="token operator">></span> event<span class="token punctuation">.</span><span class="token function">waitUntil</span><span class="token punctuation">(</span>
+  Promise<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token comment" spellcheck="true">// 更新客户端</span>
+    clients<span class="token punctuation">.</span><span class="token function">claim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">// 清理旧版本</span>
+    caches<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>cacheList <span class="token operator">=</span><span class="token operator">></span> Promise<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span>
+      cacheList<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>cacheName <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>cacheName <span class="token operator">!==</span> CACHE_NAME<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          caches<span class="token punctuation">.</span><span class="token keyword">delete</span><span class="token punctuation">(</span>cacheName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="官方工具"><a href="#官方工具" class="headerlink" title="官方工具"></a>官方工具</h1><h2 id="Webpack-插件-sw-precache-webpack-plugin"><a href="#Webpack-插件-sw-precache-webpack-plugin" class="headerlink" title="Webpack 插件 sw-precache-webpack-plugin"></a>Webpack 插件 sw-precache-webpack-plugin</h2><p>通过sw-precache-webpack-plugin可以自动生成service worker</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">const</span> SWPrecacheWebpackPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sw-precache-webpack-plugin'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token operator">...</span>
+  plugins<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token keyword">new</span> <span class="token class-name">SWPrecacheWebpackPlugin</span><span class="token punctuation">(</span>
+      <span class="token punctuation">{</span>
+        cacheId<span class="token punctuation">:</span> <span class="token string">'my-project-name'</span><span class="token punctuation">,</span>
+        filename<span class="token punctuation">:</span> <span class="token string">'my-service-worker.js'</span><span class="token punctuation">,</span>
+        maximumFileSizeToCacheInBytes<span class="token punctuation">:</span> <span class="token number">4194304</span><span class="token punctuation">,</span>
+        minify<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        runtimeCaching<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+          handler<span class="token punctuation">:</span> <span class="token string">'cacheFirst'</span><span class="token punctuation">,</span>
+          urlPattern<span class="token punctuation">:</span> <span class="token regex">/[.]mp3$/</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+                    
+<div class="pagination">
+    <ul class="page-nav">
+       
+        
+        
+           <li class="next extend"><a href="/2017/10/27/2017秋招总结/" class="alignright next">秋招总结 <i class="fa fa-long-arrow-right"></i></a></li>         
+            
+      
+    </ul>
+</div>
+                </p>
+            </section>
+            
+        </article>
+
+</main>
+    <div >
+     <div id="tog-side" class="btn-gp"><i id="tog-icon" class="fa fa-user"></i></div>
+     <div id="to-top" class="btn-gp"><i class="fa fa-arrow-up"></i></div>
+    </div>
+</div>
+<aside class="sidebar">
+
+  <div class="sidebar-inner">
+    <section class="site-overview sidebar-panel sidebar-panel-active">
+      <div class="site-author">
+          
+            <img class="site-author-image" src="/images/profile_picture.jpeg" >
+          
+        
+        <p class="site-author-name" >汤俊健</p>
+
+        <p class="site-description">graduated form South China Normal University, will work for R &amp; D Center of CTCC as a Front-End Engineer in 2018.</p>
+      </div>
+
+      <div class="site-state" >
+
+        <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+            <span class="site-state-item-count">9</span>
+            <span class="site-state-item-name">Articles</span>
+          </a>
+        </div>
+
+        <div class="site-state-item site-state-categories">
+          <a href="/categories/index.html">
+            <span class="site-state-item-count">2</span>
+            <span class="site-state-item-name">Categories</span>
+          </a>
+        </div>
+
+        <div class="site-state-item site-state-tags">
+          <a href="/tags/index.html">
+            <span class="site-state-item-count">5</span>
+            <span class="site-state-item-name">Tags</span>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="social-contact" >
+        <ul>
+            
+              <li> <a href="https://github.com/freshtang"><i class="fa fa-github fa-2x"></i></a></li>
+            
+            
+              <li> <a href="https://weibo.com/u/2208953612"><i class="fa fa-weibo fa-2x"></i></a></li>
+            
+            
+              <li> <a href="11514376"><i class="fa fa-qq fa-2x"></i></a></li>
+            
+            
+              <li> <a href="junjiant"><i class="fa fa-wechat fa-2x"></i></a></li>
+            
+            
+              <li> <a href="mailto:11514376@qq.com"><i class="fa fa-envelope fa-2x"></i></a></li>
+            
+            
+              <li> <a href="t"><i class="fa fa-twitter fa-2x"></i></a></li>
+            
+        </ul>
+      </div>
+
+    </section>
+  </div>
+</aside>
+<footer id="footer">
+
+  © 2017 汤俊健
+  
+  <br>
+  Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/freshtang" target="_blank">freshtang</a>
+</footer>
+</body>
+<script src="/js/index.js"></script>
+</html>
+

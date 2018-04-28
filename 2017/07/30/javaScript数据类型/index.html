@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link href="/images/blog.png" rel="shortcut icon">
+    <title>blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/prism-atom-dark.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+        
+<div class="main">
+    <header id="header">
+  <nav class="clear">
+      
+      <button class="toggle">
+          <span class="icon-toggle icon"></span>
+          <span class="icon-toggle icon"></span>
+          <span class="icon-toggle icon"></span>
+      </button>
+      <a  class="brand" href="/">Little life, little blog</a>
+      <div class="clear nar-wrap">
+          <ul class="nav clear">
+              
+                  <li>
+                      <a href="/" title="Home">
+                          <i class="fa fa-home"></i>
+                          Home
+                      </a>
+                  </li>
+              
+                  <li>
+                      <a href="/archives" title="Archives">
+                          <i class="fa fa-archive"></i>
+                          Archives
+                      </a>
+                  </li>
+              
+                  <li>
+                      <a href="/categories" title="Categories">
+                          <i class="fa fa-folder"></i>
+                          Categories
+                      </a>
+                  </li>
+              
+                  <li>
+                      <a href="/tags" title="Tags">
+                          <i class="fa fa-tags"></i>
+                          Tags
+                      </a>
+                  </li>
+              
+          </ul>
+      </div>
+  </nav>
+
+</header>
+    <main id="post">
+  
+    <article class="article">
+            <header>
+                <h3>
+                    javaScript数据类型
+                    
+                        <a href="/tags/基础/"><span ><i class="fa fa-tags"></i>基础</a>
+                    
+                </h3>
+            </header>
+            <div class="decorate"><time datetime="2017-09-30">2017-07-30</time> On 
+                <a href="/categories/前端/">前端、</a>
+             </div>
+            <section>
+                <p>
+                    <p>字符串（String）、数字(Number)、布尔(Boolean)、空（Null）、未定义（Undefined）、对象(Object)、数组(Array)、函数对象（Function）、标志 (ECMAScript 6 新增”Symbol“）</p>
+<p>前五种为基本数据类型，数组(Array)、函数对象（Function）也属于对象(Object)。</p>
+<a id="more"></a> 
+<h2 id="一、数据类型判断方法"><a href="#一、数据类型判断方法" class="headerlink" title="一、数据类型判断方法"></a>一、数据类型判断方法</h2><h3 id="1-typeof"><a href="#1-typeof" class="headerlink" title="1.typeof"></a>1.typeof</h3><p>typeof 返回的类型有”undefined”、”object”、”boolean”、”number”、”string”、”symbol”、”function”、（注： typeof null 返回 “object”）</p>
+<p>常见想当然例子：</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// Numbers</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token number">37</span> <span class="token operator">===</span> <span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token number">3.14</span> <span class="token operator">===</span> <span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> Math<span class="token punctuation">.</span>LN2 <span class="token operator">===</span> <span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token number">Infinity</span> <span class="token operator">===</span> <span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token number">NaN</span> <span class="token operator">===</span> <span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 尽管NaN是"Not-A-Number"的缩写,意思是"不是一个数字"</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token function">Number</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 不要这样使用!</span>
+
+<span class="token comment" spellcheck="true">// Strings</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token string">""</span> <span class="token operator">===</span> <span class="token string">'string'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token string">"bla"</span> <span class="token operator">===</span> <span class="token string">'string'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string">'string'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// console.log(typeof返回的肯定是一个字符串</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token function">String</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string">'string'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 不要这样使用!</span>
+
+<span class="token comment" spellcheck="true">// Booleans</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token boolean">true</span> <span class="token operator">===</span> <span class="token string">'boolean'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token boolean">false</span> <span class="token operator">===</span> <span class="token string">'boolean'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token function">Boolean</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string">'boolean'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 不要这样使用!</span>
+
+<span class="token comment" spellcheck="true">// Symbols</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token function">Symbol</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string">'symbol'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token function">Symbol</span><span class="token punctuation">(</span><span class="token string">'foo'</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string">'symbol'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> Symbol<span class="token punctuation">.</span>iterator <span class="token operator">===</span> <span class="token string">'symbol'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Undefined</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> undefined <span class="token operator">===</span> <span class="token string">'undefined'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> blabla <span class="token operator">===</span> <span class="token string">'undefined'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 一个未定义的变量,或者一个定义了却未赋初值的变量</span>
+
+<span class="token comment" spellcheck="true">// Objects 使用Array.isArray或者Object.prototype.toString.call方法可以从基本的对象中区分出数组类型</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token punctuation">{</span>a<span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">}</span> <span class="token operator">===</span> <span class="token string">'object'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token string">'object'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token operator">/</span><span class="token operator">^</span><span class="token punctuation">[</span>a<span class="token operator">-</span>zA<span class="token operator">-</span>Z<span class="token punctuation">]</span><span class="token punctuation">{</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">}</span>$<span class="token operator">/</span> <span class="token operator">===</span> <span class="token string">'object'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token punctuation">{</span>name<span class="token punctuation">:</span><span class="token string">'wenzi'</span><span class="token punctuation">,</span> age<span class="token punctuation">:</span><span class="token number">25</span><span class="token punctuation">}</span> <span class="token operator">===</span> <span class="token string">'object'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token keyword">null</span> <span class="token operator">===</span> <span class="token string">'object'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+
+<span class="token comment" spellcheck="true">// Function</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span> <span class="token operator">===</span> <span class="token string">'function'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> Math<span class="token punctuation">.</span>sin <span class="token operator">===</span> <span class="token string">'function'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="2-instanceof"><a href="#2-instanceof" class="headerlink" title="2.instanceof"></a>2.instanceof</h3><p>a instanceof b 字面意思 判断a是否为b的实例。</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">var</span> A <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">A</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+A<span class="token punctuation">.</span>prototype <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">var</span> b <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">A</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>a <span class="token keyword">instanceof</span> <span class="token class-name">A</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//false</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>b <span class="token keyword">instanceof</span> <span class="token class-name">A</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>instanceof又叫关系运算符，可以用来判断某个构造函数的prototype属性是否存在另外一个要检测对象的原型链上</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">//表达式一的指向</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span>__proto__ <span class="token operator">===</span> String<span class="token punctuation">.</span>prototype<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>str <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//true</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span>__proto__<span class="token punctuation">.</span>__proto__ <span class="token operator">===</span> Object<span class="token punctuation">.</span>prototype<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>str <span class="token keyword">instanceof</span> <span class="token class-name">Object</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//true</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Object <span class="token keyword">instanceof</span> <span class="token class-name">Object</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Function <span class="token keyword">instanceof</span> <span class="token class-name">Function</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Number <span class="token keyword">instanceof</span> <span class="token class-name">Number</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//false</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>String <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//false</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Function <span class="token keyword">instanceof</span> <span class="token class-name">Object</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Foo <span class="token keyword">instanceof</span> <span class="token class-name">Function</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Foo <span class="token keyword">instanceof</span> <span class="token class-name">Foo</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//false</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="3-constructor"><a href="#3-constructor" class="headerlink" title="3.constructor"></a>3.constructor</h3><p>Object.prototype.constructor返回一个指向创建了该对象原型的函数引用。需要注意的是，该属性的值是那个函数本身，而不是一个包含函数名称的字符串。对于原始值（如1，true 或 “test”），该属性为只读，所有对象都会从它的原型上继承一个 constructor 属性</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">function</span> <span class="token function">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span>
+<span class="token keyword">var</span> Tom <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Tom<span class="token punctuation">.</span>constructor <span class="token operator">===</span> Person<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="4-万能的Object-prototype-toString-call"><a href="#4-万能的Object-prototype-toString-call" class="headerlink" title="4.万能的Object.prototype.toString.call"></a>4.万能的Object.prototype.toString.call</h3><pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">function</span> <span class="token function">Type</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">var</span> toString <span class="token operator">=</span> Object<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>toString<span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string">'[object Date]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token operator">===</span><span class="token string">'[object String]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Function</span><span class="token punctuation">)</span> <span class="token operator">===</span><span class="token string">'[object Function]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>Type<span class="token punctuation">)</span> <span class="token operator">===</span><span class="token string">'[object Function]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token string">'str'</span><span class="token punctuation">)</span> <span class="token operator">===</span><span class="token string">'[object String]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>Math<span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string">'[object Math]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token operator">===</span><span class="token string">'[object Boolean]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token regex">/^[a-zA-Z]{5,20}$/</span><span class="token punctuation">)</span> <span class="token operator">===</span><span class="token string">'[object RegExp]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">{</span>name<span class="token punctuation">:</span><span class="token string">'wenzi'</span><span class="token punctuation">,</span> age<span class="token punctuation">:</span><span class="token number">25</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token operator">===</span><span class="token string">'[object Object]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">===</span><span class="token string">'[object Array]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+<span class="token comment" spellcheck="true">//Since JavaScript 1.8.5</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>undefined<span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string">'[object Undefined]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>toString<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string">'[object Null]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//true</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="4-jQuery的-type"><a href="#4-jQuery的-type" class="headerlink" title="4. jQuery的 $.type()"></a>4. jQuery的 $.type()</h3><p>就是用Object.prototype.toString.call实现的</p>
+<h2 id="二、类型转换"><a href="#二、类型转换" class="headerlink" title="二、类型转换"></a>二、类型转换</h2><h3 id="1-将数字转换为字符串"><a href="#1-将数字转换为字符串" class="headerlink" title="1.将数字转换为字符串"></a>1.将数字转换为字符串</h3><ul>
+<li>全局方法 String() 可以将数字转换为字符串。</li>
+<li>Number 方法 toString() 也是有同样的效果。</li>
+</ul>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token function">String</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span> 
+x<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="2-将布尔值转换为字符串"><a href="#2-将布尔值转换为字符串" class="headerlink" title="2.将布尔值转换为字符串"></a>2.将布尔值转换为字符串</h3><pre class="line-numbers language-js"><code class="language-js"><span class="token function">String</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span> 
+<span class="token boolean">true</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="3-将日期转换为字符串"><a href="#3-将日期转换为字符串" class="headerlink" title="3.将日期转换为字符串"></a>3.将日期转换为字符串</h3><pre class="line-numbers language-js"><code class="language-js"><span class="token function">String</span><span class="token punctuation">(</span><span class="token function">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token function">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="4-将字符串转换为数字"><a href="#4-将字符串转换为数字" class="headerlink" title="4.将字符串转换为数字"></a>4.将字符串转换为数字</h3><p>Number(“3.14”)</p>
+<h3 id="5-一元运算符"><a href="#5-一元运算符" class="headerlink" title="5.一元运算符 +"></a>5.一元运算符 +</h3><pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">var</span> y <span class="token operator">=</span> <span class="token string">"5"</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// y 是一个字符串</span>
+<span class="token keyword">var</span> x <span class="token operator">=</span> <span class="token operator">+</span> y<span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// x 是一个数字</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="三、-与-的区别-转"><a href="#三、-与-的区别-转" class="headerlink" title="三、 == 与 === 的区别[转]"></a>三、 == 与 === 的区别[转]</h2><h3 id="1、对于string-number等基础类型，-和-是有区别的"><a href="#1、对于string-number等基础类型，-和-是有区别的" class="headerlink" title="1、对于string,number等基础类型，==和===是有区别的"></a>1、对于string,number等基础类型，==和===是有区别的</h3><ul>
+<li>1）不同类型间比较，==之比较“转化成同一类型后的值”看“值”是否相等，===如果类型不同，其结果就是不等</li>
+<li>2）同类型比较，直接进行“值”比较，两者结果一样</li>
+</ul>
+<h3 id="2、对于Array-Object等高级类型，-和-是没有区别的"><a href="#2、对于Array-Object等高级类型，-和-是没有区别的" class="headerlink" title="2、对于Array,Object等高级类型，==和===是没有区别的"></a>2、对于Array,Object等高级类型，==和===是没有区别的</h3><ul>
+<li>进行“指针地址”比较</li>
+</ul>
+<h3 id="3、基础类型与高级类型，-和-是有区别的"><a href="#3、基础类型与高级类型，-和-是有区别的" class="headerlink" title="3、基础类型与高级类型，==和===是有区别的"></a>3、基础类型与高级类型，==和===是有区别的</h3><ul>
+<li>1）对于==，将高级转化为基础类型，进行“值”比较</li>
+<li>2）因为类型不同，===结果为false</li>
+</ul>
+<h2 id="四、JS是按值传递还是按引用传递"><a href="#四、JS是按值传递还是按引用传递" class="headerlink" title="四、JS是按值传递还是按引用传递"></a>四、JS是按值传递还是按引用传递</h2><p>其实，按共享传递 call by sharing，准确的说，JS中的基本类型按值传递，对象类型按共享传递的(call by sharing，也叫按对象传递、按对象共享传递)。</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">function</span> <span class="token function">changeStuff</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  a <span class="token operator">=</span> a <span class="token operator">*</span> <span class="token number">10</span><span class="token punctuation">;</span>
+  b<span class="token punctuation">.</span>item <span class="token operator">=</span> <span class="token string">"changed"</span><span class="token punctuation">;</span>
+  c <span class="token operator">=</span> <span class="token punctuation">{</span>item<span class="token punctuation">:</span> <span class="token string">"changed"</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> num <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> obj1 <span class="token operator">=</span> <span class="token punctuation">{</span>item<span class="token punctuation">:</span> <span class="token string">"unchanged"</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> obj2 <span class="token operator">=</span> <span class="token punctuation">{</span>item<span class="token punctuation">:</span> <span class="token string">"unchanged"</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token function">changeStuff</span><span class="token punctuation">(</span>num<span class="token punctuation">,</span> obj1<span class="token punctuation">,</span> obj2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>obj1<span class="token punctuation">.</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>    
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>obj2<span class="token punctuation">.</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+                    
+<div class="pagination">
+    <ul class="page-nav">
+       
+        		
+          <li class="prev extend"><a href="/2017/08/01/模块化/" class="alignleft prev"><i class="fa fa-long-arrow-left"></i> Javascript模块化</a></li>
+          
+        
+           <li class="next extend"><a href="/2017/07/30/Webpack Learning Notes/" class="alignright next">Webpack学习笔记 <i class="fa fa-long-arrow-right"></i></a></li>         
+            
+      
+    </ul>
+</div>
+                </p>
+            </section>
+            
+        </article>
+
+</main>
+    <div >
+     <div id="tog-side" class="btn-gp"><i id="tog-icon" class="fa fa-user"></i></div>
+     <div id="to-top" class="btn-gp"><i class="fa fa-arrow-up"></i></div>
+    </div>
+</div>
+<aside class="sidebar">
+
+  <div class="sidebar-inner">
+    <section class="site-overview sidebar-panel sidebar-panel-active">
+      <div class="site-author">
+          
+            <img class="site-author-image" src="/images/profile_picture.jpeg" >
+          
+        
+        <p class="site-author-name" >汤俊健</p>
+
+        <p class="site-description">graduated form South China Normal University, will work for R &amp; D Center of CTCC as a Front-End Engineer in 2018.</p>
+      </div>
+
+      <div class="site-state" >
+
+        <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+            <span class="site-state-item-count">9</span>
+            <span class="site-state-item-name">Articles</span>
+          </a>
+        </div>
+
+        <div class="site-state-item site-state-categories">
+          <a href="/categories/index.html">
+            <span class="site-state-item-count">2</span>
+            <span class="site-state-item-name">Categories</span>
+          </a>
+        </div>
+
+        <div class="site-state-item site-state-tags">
+          <a href="/tags/index.html">
+            <span class="site-state-item-count">5</span>
+            <span class="site-state-item-name">Tags</span>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="social-contact" >
+        <ul>
+            
+              <li> <a href="https://github.com/freshtang"><i class="fa fa-github fa-2x"></i></a></li>
+            
+            
+              <li> <a href="https://weibo.com/u/2208953612"><i class="fa fa-weibo fa-2x"></i></a></li>
+            
+            
+              <li> <a href="11514376"><i class="fa fa-qq fa-2x"></i></a></li>
+            
+            
+              <li> <a href="junjiant"><i class="fa fa-wechat fa-2x"></i></a></li>
+            
+            
+              <li> <a href="mailto:11514376@qq.com"><i class="fa fa-envelope fa-2x"></i></a></li>
+            
+            
+              <li> <a href="t"><i class="fa fa-twitter fa-2x"></i></a></li>
+            
+        </ul>
+      </div>
+
+    </section>
+  </div>
+</aside>
+<footer id="footer">
+
+  © 2017 汤俊健
+  
+  <br>
+  Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/freshtang" target="_blank">freshtang</a>
+</footer>
+</body>
+<script src="/js/index.js"></script>
+</html>
+
